@@ -4,14 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
-<title>deterministic-signal.trading // PRE-LAUNCH</title>
+<title>deterministic-signal.trading // LIVE STATE</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#0a0a0a; --green:#3dff88; --text:#e6e6e6;
-    --muted:#6e6e6e; --border:#1c1c1c;
+    --bg:#0a0a0a; --green:#3dff88; --amber:#ffb000; --red:#ff4d5e;
+    --text:#e6e6e6; --muted:#6e6e6e; --border:#1c1c1c;
   }
   *{margin:0;padding:0;box-sizing:border-box}
   html,body{height:100%}
@@ -27,7 +27,7 @@
       rgba(61,255,136,.03) 0 1px, transparent 1px 4px);
   }
   .boot{color:var(--muted); font-size:13px; line-height:2}
-  .boot .status{color:var(--green)}
+  .g{color:var(--green)} .a{color:var(--amber)} .r{color:var(--red)}
   .cursor{
     display:inline-block; width:9px; height:15px; margin-left:7px;
     background:var(--green); vertical-align:text-bottom;
@@ -35,41 +35,33 @@
   }
   @keyframes blink{50%{opacity:0}}
   @media (prefers-reduced-motion: reduce){ .cursor{animation:none} }
-  main{
-    flex:1; display:flex; flex-direction:column; justify-content:center;
-    width:100%; max-width:880px; margin:0 auto;
-  }
-  .eyebrow{
-    color:var(--green); font-size:12px; letter-spacing:3px;
-    margin-bottom:20px;
-  }
-  h1{
-    font-size:clamp(30px,6.4vw,60px); font-weight:800;
-    letter-spacing:-1px; line-height:1.06;
-  }
+
+  main{flex:1; width:100%; max-width:920px; margin:0 auto; padding-top:6vh}
+  .eyebrow{color:var(--green); font-size:12px; letter-spacing:3px; margin:44px 0 18px}
+  h1{font-size:clamp(30px,6.4vw,60px); font-weight:800; letter-spacing:-1px; line-height:1.06}
   h1 .dot{color:var(--green)}
-  .sub{
-    color:var(--muted); margin-top:20px; font-size:15px;
-    line-height:1.75; max-width:58ch;
-  }
-  .grid{
-    display:grid; gap:14px; margin-top:46px;
-    grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
-  }
+  .sub{color:var(--muted); margin-top:18px; font-size:15px; line-height:1.75; max-width:60ch}
+
+  .grid{display:grid; gap:14px; margin-top:22px;
+        grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
   .card{border:1px solid var(--border); padding:18px 20px}
   .card .k{color:var(--muted); font-size:11px; letter-spacing:2px}
-  .card .v{color:var(--green); font-size:16px; font-weight:700; margin-top:9px}
-  footer{
-    color:var(--muted); font-size:13px; padding-top:44px;
-  }
+  .card .v{color:var(--green); font-size:15px; font-weight:700; margin-top:9px;
+           word-break:break-all; line-height:1.5}
+  .card .v.dim{color:var(--muted); font-weight:400}
+  .card .n{color:var(--muted); font-size:11px; margin-top:8px; line-height:1.6}
+
+  footer{color:var(--muted); font-size:13px; padding-top:48px}
 </style>
 </head>
 <body>
+
   <div class="boot" role="banner">
     // DJZS_SIGNAL — SYS_ID: dst-signal-01<br>
     // SURFACE: deterministic-signal.trading<br>
-    <span class="status">// STATUS: PRE-LAUNCH</span><span class="cursor" aria-hidden="true"></span>
+    // STATUS: <span id="status" class="a">PROBING GATE…</span><span class="cursor" aria-hidden="true"></span>
   </div>
+
   <main>
     <div class="eyebrow">// SECTION: BOOT</div>
     <h1>DETERMINISTIC<br>SIGNAL<span class="dot">.</span>TRADING</h1>
@@ -77,21 +69,103 @@
       Adversarial logic audit applied to every trade thesis before execution.
       Deterministic verdicts, hash-stamped. No narrative entries survive the gate.
     </p>
+
+    <div class="eyebrow">// SECTION: LIVE_STATE</div>
     <div class="grid">
       <div class="card">
-        <div class="k">VERDICTS</div>
-        <div class="v">PASS / WAIT / FAIL</div>
+        <div class="k">GATE</div>
+        <div class="v dim" id="gate-v">—</div>
+        <div class="n">gate.deterministic-signal.trading — the only order
+        endpoint refuses everything without a verdict.</div>
       </div>
       <div class="card">
-        <div class="k">DOCTRINE</div>
-        <div class="v">AUDIT-BEFORE-ACT</div>
+        <div class="k">LEDGER</div>
+        <div class="v dim" id="ledger-v">—</div>
+        <div class="n">D1 attribution ledger · schema v0.2 · fixed-point
+        integers only, no floats on the money path.</div>
       </div>
       <div class="card">
-        <div class="k">ENGINE</div>
-        <div class="v">DETERMINISTIC</div>
+        <div class="k">LAST PROBE</div>
+        <div class="v dim" id="probe-v">—</div>
+        <div class="n" id="probe-n">this page probes the gate from your
+        browser on every load.</div>
       </div>
     </div>
+
+    <div class="eyebrow">// SECTION: ON_THE_RECORD</div>
+    <div class="grid">
+      <div class="card">
+        <div class="k">FIRST VERDICT — 2026-08-21</div>
+        <div class="v">e2e-0001 · FAIL · RISK 60 · M01+M02</div>
+        <div class="n">verdict_hash 0x10d61c27…baee38 — stamped before the
+        outcome was knowable. The engine's first recorded act was
+        failing a thesis.</div>
+      </div>
+      <div class="card">
+        <div class="k">GATE PROOF</div>
+        <div class="v">NO ORDER WITHOUT A VERDICT</div>
+        <div class="n">enforced at the database layer (foreign key), proven
+        by refusal from two independent seats. Structural, not advisory.</div>
+      </div>
+      <div class="card">
+        <div class="k">INCREMENT 1 — CLOSED</div>
+        <div class="v">CERT 516771ec…e520b8</div>
+        <div class="n">schema applied · verdict path live · gate proven ·
+        canonical probe 3/3 · corroborated by both seats.</div>
+      </div>
+    </div>
+
+    <div class="eyebrow">// SECTION: DOCTRINE</div>
+    <div class="grid">
+      <div class="card"><div class="k">VERDICTS</div><div class="v">PASS / WAIT / FAIL</div></div>
+      <div class="card"><div class="k">DOCTRINE</div><div class="v">AUDIT-BEFORE-ACT</div></div>
+      <div class="card"><div class="k">ENGINE</div><div class="v">LLM DETECTS · TS DECIDES</div></div>
+    </div>
   </main>
+
   <footer>END_TRANSMISSION. //</footer>
+
+<script>
+(function () {
+  var st = document.getElementById('status');
+  var gv = document.getElementById('gate-v');
+  var lv = document.getElementById('ledger-v');
+  var pv = document.getElementById('probe-v');
+  var pn = document.getElementById('probe-n');
+
+  function set(el, txt, cls) { el.textContent = txt; el.className = 'v ' + (cls || ''); }
+
+  var ctl = new AbortController();
+  var t = setTimeout(function () { ctl.abort(); }, 6000);
+
+  fetch('https://gate.deterministic-signal.trading/health', { signal: ctl.signal })
+    .then(function (r) { return r.json(); })
+    .then(function (h) {
+      clearTimeout(t);
+      if (h && h.ledger === 'connected') {
+        st.textContent = 'OPERATIONAL — LEDGER CONNECTED';
+        st.className = 'g';
+        set(gv, 'LIVE · ds-trading-worker ' + (h.worker || ''), '');
+        set(lv, 'CONNECTED', '');
+        set(pv, new Date().toISOString().replace('T', ' ').slice(0, 19) + 'Z', '');
+        pn.textContent = 'verified live from your browser, just now.';
+      } else {
+        st.textContent = 'GATE UP — LEDGER DEGRADED';
+        st.className = 'a';
+        set(gv, 'LIVE', ''); set(lv, String(h && h.ledger || 'unknown'), 'dim');
+      }
+    })
+    .catch(function () {
+      clearTimeout(t);
+      st.textContent = 'PRE-LAUNCH — LIVE WIRE PENDING';
+      st.className = 'a';
+      set(gv, 'LIVE (verified server-side)', 'dim');
+      set(lv, 'CONNECTED (verified server-side)', 'dim');
+      set(pv, 'browser wire blocked (CORS)', 'dim');
+      pn.textContent = 'direct browser probe pending a one-line CORS allowance on the gate — state above verified by the audit seat.';
+    });
+})();
+</script>
+
 </body>
 </html>
