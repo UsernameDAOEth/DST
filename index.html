@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
-<title>deterministic-signal.trading // LIVE STATE</title>
+<title>deterministic-signal.trading — the gate</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet">
@@ -14,20 +14,19 @@
     --text:#e6e6e6; --muted:#6e6e6e; --border:#1c1c1c;
   }
   *{margin:0;padding:0;box-sizing:border-box}
-  html,body{height:100%}
   body{
     background:var(--bg); color:var(--text);
     font-family:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,monospace;
-    display:flex; flex-direction:column; min-height:100vh;
-    padding:44px clamp(20px,5vw,64px);
+    min-height:100vh; padding:44px clamp(20px,5vw,64px) 0;
   }
   body::after{
     content:""; position:fixed; inset:0; pointer-events:none;
     background:repeating-linear-gradient(0deg,
       rgba(61,255,136,.03) 0 1px, transparent 1px 4px);
   }
+  a{color:var(--green); text-decoration:none}
   .boot{color:var(--muted); font-size:13px; line-height:2}
-  .g{color:var(--green)} .a{color:var(--amber)} .r{color:var(--red)}
+  .g{color:var(--green)} .a{color:var(--amber)}
   .cursor{
     display:inline-block; width:9px; height:15px; margin-left:7px;
     background:var(--green); vertical-align:text-bottom;
@@ -36,22 +35,30 @@
   @keyframes blink{50%{opacity:0}}
   @media (prefers-reduced-motion: reduce){ .cursor{animation:none} }
 
-  main{flex:1; width:100%; max-width:920px; margin:0 auto; padding-top:6vh}
-  .eyebrow{color:var(--green); font-size:12px; letter-spacing:3px; margin:44px 0 18px}
-  h1{font-size:clamp(30px,6.4vw,60px); font-weight:800; letter-spacing:-1px; line-height:1.06}
+  main{width:100%; max-width:960px; margin:0 auto}
+  .eyebrow{color:var(--green); font-size:12px; letter-spacing:3px; margin:64px 0 18px}
+  h1{font-size:clamp(30px,6.4vw,60px); font-weight:800; letter-spacing:-1px; line-height:1.06; margin-top:6vh}
   h1 .dot{color:var(--green)}
-  .sub{color:var(--muted); margin-top:18px; font-size:15px; line-height:1.75; max-width:60ch}
+  .sub{color:var(--muted); margin-top:18px; font-size:15px; line-height:1.75; max-width:62ch}
+  .lede{color:var(--text); font-size:16px; line-height:1.8; max-width:66ch; margin-top:14px}
+  .lede b{color:var(--green); font-weight:700}
 
-  .grid{display:grid; gap:14px; margin-top:22px;
+  .grid{display:grid; gap:14px; margin-top:20px;
         grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
   .card{border:1px solid var(--border); padding:18px 20px}
   .card .k{color:var(--muted); font-size:11px; letter-spacing:2px}
   .card .v{color:var(--green); font-size:15px; font-weight:700; margin-top:9px;
-           word-break:break-all; line-height:1.5}
+           word-break:break-word; line-height:1.5}
   .card .v.dim{color:var(--muted); font-weight:400}
-  .card .n{color:var(--muted); font-size:11px; margin-top:8px; line-height:1.6}
+  .card .n{color:var(--muted); font-size:12px; margin-top:9px; line-height:1.7}
 
-  footer{color:var(--muted); font-size:13px; padding-top:48px}
+  .flow{display:flex; flex-wrap:wrap; gap:10px; margin-top:20px; align-items:stretch}
+  .step{border:1px solid var(--border); padding:14px 16px; flex:1 1 190px}
+  .step .t{color:var(--green); font-weight:700; font-size:13px; letter-spacing:1px}
+  .step .d{color:var(--muted); font-size:12px; margin-top:8px; line-height:1.7}
+  .arrow{color:var(--muted); align-self:center; font-weight:700}
+
+  footer{color:var(--muted); font-size:13px; padding:72px 0 44px; max-width:960px; margin:0 auto}
 </style>
 </head>
 <body>
@@ -63,11 +70,49 @@
   </div>
 
   <main>
-    <div class="eyebrow">// SECTION: BOOT</div>
     <h1>DETERMINISTIC<br>SIGNAL<span class="dot">.</span>TRADING</h1>
+    <p class="lede">
+      A verdict-gated trading system for regulated prediction markets.
+      <b>No order exists without a fresh, hash-stamped audit verdict.</b>
+      Not a promise — a foreign-key constraint.
+    </p>
     <p class="sub">
       Adversarial logic audit applied to every trade thesis before execution.
-      Deterministic verdicts, hash-stamped. No narrative entries survive the gate.
+      Deterministic verdicts. No narrative entries survive the gate.
+    </p>
+
+    <div class="eyebrow">// SECTION: THE_GATE</div>
+    <div class="flow">
+      <div class="step"><div class="t">THESIS</div>
+        <div class="d">Yours, or the signal box's. Stated plainly: market,
+        side, probability claim, invalidation.</div></div>
+      <div class="arrow">-></div>
+      <div class="step"><div class="t">AUDIT</div>
+        <div class="d">DJZS-M taxonomy scans the logic: narrative gap ·
+        missing falsification · unsourced probability · no stated edge.
+        The model detects; deterministic code decides.</div></div>
+      <div class="arrow">-></div>
+      <div class="step"><div class="t">VERDICT</div>
+        <div class="d">PASS / WAIT / FAIL — sha256-stamped before the
+        outcome is knowable. Tamper-evident by construction.</div></div>
+      <div class="arrow">-></div>
+      <div class="step"><div class="t">ORDER</div>
+        <div class="d">PASS unlocks it. Anything else is refused at the
+        database layer. The gate says no by default.</div></div>
+    </div>
+
+    <div class="eyebrow">// SECTION: WHY_THIS_EXISTS</div>
+    <p class="lede">
+      On the live event-market tape, roughly <b>four of every five taker
+      contracts</b> enter below ten cents implied — and resolve near zero.
+      The favorites side grinds pennies that fees mostly reclaim. The
+      20–60&cent; band — where actual theses live — is <b>nearly empty.</b>
+    </p>
+    <p class="sub">
+      The middle of this market is vacant because nobody makes
+      mid-probability discipline tractable. This system exists to fill
+      that vacancy: structure, invalidation, and a probability basis —
+      enforced, not suggested.
     </p>
 
     <div class="eyebrow">// SECTION: LIVE_STATE</div>
@@ -81,8 +126,8 @@
       <div class="card">
         <div class="k">LEDGER</div>
         <div class="v dim" id="ledger-v">—</div>
-        <div class="n">D1 attribution ledger · schema v0.2 · fixed-point
-        integers only, no floats on the money path.</div>
+        <div class="n">Attribution ledger · fixed-point integers only —
+        no floats anywhere on the money path.</div>
       </div>
       <div class="card">
         <div class="k">LAST PROBE</div>
@@ -96,34 +141,77 @@
     <div class="grid">
       <div class="card">
         <div class="k">FIRST VERDICT — 2026-08-21</div>
-        <div class="v">e2e-0001 · FAIL · RISK 60 · M01+M02</div>
-        <div class="n">verdict_hash 0x10d61c27…baee38 — stamped before the
-        outcome was knowable. The engine's first recorded act was
-        failing a thesis.</div>
+        <div class="v">e2e-0001 · FAIL · RISK 60</div>
+        <div class="n">verdict_hash 0x10d61c27…baee38, stamped pre-outcome.
+        The engine's first recorded act was failing a thesis.</div>
       </div>
       <div class="card">
         <div class="k">GATE PROOF</div>
         <div class="v">NO ORDER WITHOUT A VERDICT</div>
-        <div class="n">enforced at the database layer (foreign key), proven
-        by refusal from two independent seats. Structural, not advisory.</div>
+        <div class="n">Enforced by foreign key. Proven by refusal — twice,
+        from independent seats. Structural, not advisory.</div>
       </div>
       <div class="card">
         <div class="k">INCREMENT 1 — CLOSED</div>
         <div class="v">CERT 516771ec…e520b8</div>
-        <div class="n">schema applied · verdict path live · gate proven ·
-        canonical probe 3/3 · corroborated by both seats.</div>
+        <div class="n">Schema live · verdict path live · gate proven ·
+        canonical probe 3/3, corroborated.</div>
       </div>
+    </div>
+
+    <div class="eyebrow">// SECTION: THE_SIGNAL_BOX</div>
+    <p class="lede"><b>Ideas are allowed. Unaudited ideas are not.</b></p>
+    <p class="sub">
+      Candidate theses come only from registered signal classes: fixed
+      rules, named public data sources, backtests against historical
+      resolutions, and kill criteria written before the first signal fires.
+      Every class is Brier-scored against the hardest benchmark there is —
+      the market price itself — and retires automatically when it stops
+      beating it. And every output passes the same gate as a human thesis.
+      The engine can, and will, fail its own signals. That refusal is a
+      feature, printed on the record.
+    </p>
+
+    <div class="eyebrow">// SECTION: THE_LEDGER</div>
+    <p class="sub">
+      Every verdict is graded at resolution. The accuracy claim is not
+      "we predict markets" — it is <span class="g">filter alpha</span>:
+      do PASS-verdicted theses outperform the FAIL cohort they were
+      separated from? That number is computed from hash-stamped rows
+      written before outcomes existed. A public, tamper-evident
+      scoreboard is the roadmap — receipts, not testimony.
+    </p>
+
+    <div class="eyebrow">// SECTION: OPERATING_MODEL</div>
+    <div class="grid">
+      <div class="card"><div class="k">YOUR KEYS</div>
+        <div class="v">BYO API KEY · YOUR ACCOUNT ONLY</div>
+        <div class="n">The system never holds funds and never routes
+        another member's orders. Built for CFTC-regulated event
+        markets — Kalshi first.</div></div>
+      <div class="card"><div class="k">THE TOLL</div>
+        <div class="v">2.00 USDC / VERDICT · x402</div>
+        <div class="n">Machine-payable per audit on Base. Agents pay the
+        same toll humans do. The verdict is the product.</div></div>
+      <div class="card"><div class="k">STATUS</div>
+        <div class="v">PRE-LAUNCH · GATE LIVE</div>
+        <div class="n">The audit engine and the gate run today. Venue
+        execution ships only when explicitly ruled — until then, the
+        system's answer to every order is no.</div></div>
     </div>
 
     <div class="eyebrow">// SECTION: DOCTRINE</div>
     <div class="grid">
       <div class="card"><div class="k">VERDICTS</div><div class="v">PASS / WAIT / FAIL</div></div>
       <div class="card"><div class="k">DOCTRINE</div><div class="v">AUDIT-BEFORE-ACT</div></div>
-      <div class="card"><div class="k">ENGINE</div><div class="v">LLM DETECTS · TS DECIDES</div></div>
+      <div class="card"><div class="k">ENGINE</div><div class="v">LLM DETECTS · CODE DECIDES</div></div>
     </div>
   </main>
 
-  <footer>END_TRANSMISSION. //</footer>
+  <footer>
+    engine lineage: DJZS Protocol — <a href="https://djzs.ai">djzs.ai</a><br><br>
+    END_TRANSMISSION. //
+  </footer>
 
 <script>
 (function () {
@@ -152,7 +240,7 @@
       } else {
         st.textContent = 'GATE UP — LEDGER DEGRADED';
         st.className = 'a';
-        set(gv, 'LIVE', ''); set(lv, String(h && h.ledger || 'unknown'), 'dim');
+        set(gv, 'LIVE', ''); set(lv, String((h && h.ledger) || 'unknown'), 'dim');
       }
     })
     .catch(function () {
@@ -161,8 +249,8 @@
       st.className = 'a';
       set(gv, 'LIVE (verified server-side)', 'dim');
       set(lv, 'CONNECTED (verified server-side)', 'dim');
-      set(pv, 'browser wire blocked (CORS)', 'dim');
-      pn.textContent = 'direct browser probe pending a one-line CORS allowance on the gate — state above verified by the audit seat.';
+      set(pv, 'browser wire pending', 'dim');
+      pn.textContent = 'direct browser probe opens with a one-line CORS allowance on the gate — state above verified server-side.';
     });
 })();
 </script>
