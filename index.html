@@ -382,6 +382,7 @@
       headers: { 'content-type': 'application/json' },
       signal: ctl.signal,
       body: JSON.stringify({
+        source: 'user',
         subject: ticker + ' ' + side.toUpperCase(),
         market_ticker: ticker,
         side: side,
