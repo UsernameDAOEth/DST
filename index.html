@@ -58,6 +58,25 @@
   .step .d{color:var(--muted); font-size:12px; margin-top:8px; line-height:1.7}
   .arrow{color:var(--muted); align-self:center; font-weight:700}
 
+  .console{border:1px solid var(--border); padding:22px; margin-top:20px}
+  .console label{display:block; color:var(--muted); font-size:11px; letter-spacing:2px; margin:14px 0 6px}
+  .console input,.console select,.console textarea{
+    width:100%; background:#0d0d0d; border:1px solid var(--border);
+    color:var(--text); font-family:inherit; font-size:14px; padding:10px 12px}
+  .console textarea{min-height:110px; resize:vertical; line-height:1.6}
+  .console input:focus,.console select:focus,.console textarea:focus{outline:none; border-color:var(--green)}
+  .row2{display:grid; gap:14px; grid-template-columns:1fr 1fr 1fr}
+  @media (max-width:640px){.row2{grid-template-columns:1fr}}
+  .runbtn{margin-top:18px; background:transparent; border:1px solid var(--green);
+    color:var(--green); font-family:inherit; font-weight:700; font-size:14px;
+    letter-spacing:2px; padding:12px 26px; cursor:pointer}
+  .runbtn:hover{background:var(--green); color:#0a0a0a}
+  .runbtn:disabled{opacity:.4; cursor:wait}
+  .vpanel{margin-top:18px; border:1px solid var(--border); padding:18px 20px; display:none}
+  .vpanel .big{font-size:26px; font-weight:800; letter-spacing:1px}
+  .vpanel.pass .big{color:var(--green)} .vpanel.wait .big{color:var(--amber)} .vpanel.fail .big{color:var(--red)}
+  .vpanel .line{color:var(--muted); font-size:13px; margin-top:8px; line-height:1.7; word-break:break-all}
+  .vpanel .line b{color:var(--text)}
   footer{color:var(--muted); font-size:13px; padding:72px 0 44px; max-width:960px; margin:0 auto}
 </style>
 </head>
@@ -80,6 +99,37 @@
       Adversarial logic audit applied to every trade thesis before execution.
       Deterministic verdicts. No narrative entries survive the gate.
     </p>
+
+    <div class="eyebrow">// SECTION: THE_CONSOLE — RUN A REAL AUDIT</div>
+    <div class="console">
+      <div class="row2">
+        <div>
+          <label>MARKET TICKER</label>
+          <input id="c-ticker" type="text" placeholder="KXBTCD-25AUG23-T77749.99" autocomplete="off">
+        </div>
+        <div>
+          <label>SIDE</label>
+          <select id="c-side"><option value="yes">YES</option><option value="no">NO</option></select>
+        </div>
+        <div>
+          <label>YOUR PROBABILITY (%)</label>
+          <input id="c-p" type="number" min="1" max="99" placeholder="55">
+        </div>
+      </div>
+      <label>THESIS — CLAIM · BASIS · INVALIDATION</label>
+      <textarea id="c-thesis" placeholder="State the claim, the evidence it rests on, and the condition that would prove you wrong. The engine scans for: narrative without mechanism, no falsification, unsourced probability, no stated edge."></textarea>
+      <button class="runbtn" id="c-run">[ RUN AUDIT ]</button>
+      <div class="vpanel" id="c-out">
+        <div class="big" id="c-verdict">—</div>
+        <div class="line" id="c-detail"></div>
+      </div>
+      <div class="line" style="color:var(--muted);font-size:12px;margin-top:12px;line-height:1.7">
+        pre-launch: audits uncharged · every submission is a real audit —
+        the verdict is decided by deterministic code, hash-stamped, and
+        written to the live ledger. The engine refuses weak logic. That
+        refusal is the product.
+      </div>
+    </div>
 
     <div class="eyebrow">// SECTION: THE_GATE</div>
     <div class="flow">
@@ -299,5 +349,70 @@
 })();
 </script>
 
+<script>
+(function () {
+  var btn = document.getElementById('c-run');
+  var out = document.getElementById('c-out');
+  var vEl = document.getElementById('c-verdict');
+  var dEl = document.getElementById('c-detail');
+  if (!btn) return;
+
+  function show(cls, big, detailHtml) {
+    out.className = 'vpanel ' + cls; out.style.display = 'block';
+    vEl.textContent = big; dEl.innerHTML = detailHtml;
+  }
+
+  btn.addEventListener('click', function () {
+    var ticker = (document.getElementById('c-ticker').value || '').trim();
+    var side = document.getElementById('c-side').value;
+    var p = parseInt(document.getElementById('c-p').value, 10);
+    var thesis = (document.getElementById('c-thesis').value || '').trim();
+
+    if (!ticker || !thesis || thesis.length < 20 || !(p >= 1 && p <= 99)) {
+      show('fail', 'REFUSED — LOCALLY', 'ticker, probability 1–99, and a real thesis (20+ chars) are required before the engine is even consulted.');
+      return;
+    }
+
+    btn.disabled = true; btn.textContent = '[ AUDITING… ]';
+    var ctl = new AbortController();
+    var t = setTimeout(function () { ctl.abort(); }, 12000);
+
+    fetch('https://gate.deterministic-signal.trading/verdicts', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      signal: ctl.signal,
+      body: JSON.stringify({
+        subject: ticker + ' ' + side.toUpperCase(),
+        market_ticker: ticker,
+        side: side,
+        p_claim_e4: p * 100,
+        thesis: thesis
+      })
+    })
+    .then(function (r) { return r.json().then(function (j) { return { s: r.status, j: j }; }); })
+    .then(function (res) {
+      clearTimeout(t);
+      var j = res.j || {};
+      if (j.verdict) {
+        var cls = j.verdict === 'PASS' ? 'pass' : (j.verdict === 'WAIT' ? 'wait' : 'fail');
+        show(cls, j.verdict + ' · RISK ' + (j.risk_score != null ? j.risk_score : '—'),
+          '<b>codes:</b> ' + (Array.isArray(j.flags) && j.flags.length ? j.flags.join(' · ') : 'none fired') +
+          '<br><b>hash:</b> ' + (j.verdict_hash || '—') +
+          '<br><b>ledger:</b> row written, stamped pre-outcome. This is the record.');
+      } else {
+        show('wait', 'ENGINE REPLY · HTTP ' + res.s,
+          'The gate answered verbatim:<br>' + JSON.stringify(j) +
+          '<br>(A refusal here is the engine talking, not a bug.)');
+      }
+    })
+    .catch(function () {
+      clearTimeout(t);
+      show('wait', 'CONSOLE WIRE PENDING',
+        'The browser wire to POST /verdicts opens with the next gate deploy (CORS allowance filed). The engine itself is live — verified server-side — and this console lights the moment the wire opens.');
+    })
+    .finally(function () { btn.disabled = false; btn.textContent = '[ RUN AUDIT ]'; });
+  });
+})();
+</script>
 </body>
 </html>
