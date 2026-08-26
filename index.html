@@ -119,8 +119,12 @@
           <input id="c-p" type="number" min="1" max="99" placeholder="55">
         </div>
       </div>
-      <label>THESIS — CLAIM · BASIS · INVALIDATION</label>
-      <textarea id="c-thesis" placeholder="State the claim, the evidence it rests on, and the condition that would prove you wrong. The engine scans for: narrative without mechanism, no falsification, unsourced probability, no stated edge."></textarea>
+      <label>SETTLEMENT — WHAT DECIDES THIS CONTRACT, AND WHY YOUR ARGUMENT BEARS ON IT</label>
+      <textarea id="c-settlement" style="min-height:70px" placeholder="Name the exact event or criterion that determines the outcome — and say why your argument bears on THAT. Not the trend, not the mood, not an adjacent quantity. The engine refuses at the door if this is missing or empty of content."></textarea>
+      <label>BASIS — WHERE YOUR PROBABILITY COMES FROM</label>
+      <textarea id="c-basis" style="min-height:70px" placeholder="Name the source, model or arithmetic behind your number. A registered rule, a dated citation, a stated calculation. &quot;Judgement&quot; is not a basis."></textarea>
+      <label>THESIS — THE ARGUMENT ITSELF</label>
+      <textarea id="c-thesis" placeholder="State the claim and the condition that would prove you wrong. The engine scans for: an argument that does not bear on what settles the contract, no falsification, a number its basis does not support, no stated edge."></textarea>
       <button class="runbtn" id="c-run">[ RUN AUDIT ]</button>
       <div class="vpanel" id="c-out">
         <div class="big" id="c-verdict">—</div>
@@ -170,25 +174,28 @@
 
     <div class="eyebrow">// SECTION: HOW_IT_WORKS</div>
     <div class="grid">
-      <div class="card"><div class="k">01 · BRING A KEY</div>
-        <div class="n">Your own Kalshi account, your own API key. The
-        system never holds funds and never touches another member's
-        account.</div></div>
-      <div class="card"><div class="k">02 · STATE A THESIS</div>
-        <div class="n">Market, side, probability claim, invalidation,
-        reasoning. Plain language in — structure out.</div></div>
-      <div class="card"><div class="k">03 · PAY THE TOLL</div>
-        <div class="n">2.00 USDC via x402. Human or agent, same rail,
-        one verdict per payment.</div></div>
+      <div class="card"><div class="k">01 · BRING A THESIS</div>
+        <div class="n">Nothing you own touches this system. No API key,
+        no funds, no account access — there is nowhere to enter one,
+        by design.</div></div>
+      <div class="card"><div class="k">02 · NAME WHAT SETTLES IT</div>
+        <div class="n">Market, side, probability — then the settlement
+        criterion your argument bears on, and the basis your number
+        rests on. Missing either, the engine refuses at the door.</div></div>
+      <div class="card"><div class="k">03 · THE TOLL — DARK</div>
+        <div class="n">Priced at 2.00 USDC via x402 and rehearsed on
+        testnet, but not switched on. Audits are free today. Human or
+        agent, same rail when it lights.</div></div>
       <div class="card"><div class="k">04 · GET THE VERDICT</div>
         <div class="n">PASS / WAIT / FAIL, risk score, which codes fired,
         the hash — stamped before the outcome exists. A FAIL shows you
         exactly where your logic broke, before it cost money. The
         refusal is also the product.</div></div>
-      <div class="card"><div class="k">05 · EXECUTE ON PASS</div>
-        <div class="n">A fresh PASS matching the audited market and side
-        unlocks the order under your key. No PASS, no order — the
-        database refuses.</div></div>
+      <div class="card"><div class="k">05 · ACT ON YOUR OWN ACCOUNT</div>
+        <div class="n">The engine judges; you execute at the venue
+        yourself. It never routes another member's order — not "not
+        yet", but by design and by the venue's own developer
+        agreement.</div></div>
       <div class="card"><div class="k">06 · GET GRADED</div>
         <div class="n">Resolution lands; the ledger scores you. You accrue
         a tamper-evident personal record: your filter alpha, your
@@ -200,8 +207,9 @@
       <div class="card">
         <div class="k">GATE</div>
         <div class="v dim" id="gate-v">—</div>
-        <div class="n">gate.deterministic-signal.trading — the only order
-        endpoint refuses everything without a verdict.</div>
+        <div class="n">gate.deterministic-signal.trading — the audit
+        endpoint. It issues verdicts and keeps the record; it places
+        no orders for anyone.</div>
       </div>
       <div class="card">
         <div class="k">LEDGER</div>
@@ -281,14 +289,15 @@
 
     <div class="eyebrow">// SECTION: OPERATING_MODEL</div>
     <div class="grid">
-      <div class="card"><div class="k">YOUR KEYS</div>
-        <div class="v">BYO API KEY · YOUR ACCOUNT ONLY</div>
-        <div class="n">The system never holds funds and never routes
-        another member's orders. Built for CFTC-regulated event
-        markets — Kalshi first.</div></div>
+      <div class="card"><div class="k">CUSTODY</div>
+        <div class="v">NO KEYS · NO FUNDS · NO ORDERS</div>
+        <div class="n">There is no key field anywhere in this product.
+        The system holds nothing and routes nothing. Built to read
+        CFTC-regulated event markets — Kalshi first.</div></div>
       <div class="card"><div class="k">THE TOLL</div>
-        <div class="v">2.00 USDC / VERDICT · x402</div>
-        <div class="n">Machine-payable per audit on Base. Agents pay the
+        <div class="v">2.00 USDC / VERDICT · x402 · DARK</div>
+        <div class="n">Machine-payable per audit on Base — rehearsed,
+        certified on testnet, not yet charging. Agents will pay the
         same toll humans do. The verdict is the product.</div></div>
       <div class="card"><div class="k">STATUS</div>
         <div class="v">PRE-LAUNCH · GATE LIVE</div>
@@ -370,9 +379,18 @@
     var side = document.getElementById('c-side').value;
     var p = parseInt(document.getElementById('c-p').value, 10);
     var thesis = (document.getElementById('c-thesis').value || '').trim();
+    var settlement = (document.getElementById('c-settlement').value || '').trim();
+    var basis = (document.getElementById('c-basis').value || '').trim();
+
+    function thin(v) { return v.length < 30 || v.split(/\s+/).filter(Boolean).length < 6; }
 
     if (!ticker || !thesis || thesis.length < 20 || !(p >= 1 && p <= 99)) {
       show('fail', 'REFUSED — LOCALLY', 'ticker, probability 1–99, and a real thesis (20+ chars) are required before the engine is even consulted.');
+      return;
+    }
+    if (thin(settlement) || thin(basis)) {
+      show('fail', 'REFUSED — LOCALLY',
+        'SETTLEMENT and BASIS each need at least 30 characters and 6 words. This is the same floor the engine enforces; the console states it here so a refusal is never a surprise.');
       return;
     }
 
@@ -390,6 +408,8 @@
         market_ticker: ticker,
         side: side,
         p_claim_e4: p * 100,
+        settlement: settlement,
+        basis: basis,
         thesis: thesis
       })
     })
